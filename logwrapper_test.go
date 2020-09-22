@@ -42,3 +42,14 @@ func TestSetLogLevel(t *testing.T) {
 	}
 
 }
+
+// TestInvalidLogLevel is testing that `SetLogLevel` will throw an error on an invalid log level
+func TestInvalidLogLevel(t *testing.T) {
+	err := SetLogLevel("BOGUS")
+
+	if err == nil {
+		t.Log("An error should have been thrown")
+		t.Fail()
+	}
+
+}
