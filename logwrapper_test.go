@@ -94,3 +94,23 @@ func TestLogFormat(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestLogLevelFilter(t *testing.T) {
+
+	// WORKAROUND: Reset buffer
+	buf.Reset()
+
+	// Set log level
+	SetLogLevel("INFO")
+
+	// Log test message
+	var message string = "this is a debug log entry"
+
+	// Create debug log entry
+	Debug(message)
+
+	if len(buf.Bytes()) != 0 {
+		t.Log("Log output should not be received in the buffer")
+		t.Fail()
+	}
+}
