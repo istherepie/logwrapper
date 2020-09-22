@@ -114,3 +114,34 @@ func TestLogLevelFilter(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestLogLevelTags(t *testing.T) {
+
+	// WORKAROUND: Reset buffer
+	buf.Reset()
+
+	// Set log level
+	SetLogLevel("INFO")
+
+	// Log test message
+	var message string = "this is a debug log entry"
+
+	Info(message)
+
+	r, err := regexp.Compile("^INFO")
+
+	if err != nil {
+		t.Log(err)
+		t.Fail()
+	}
+
+	matched := r.MatchString(buf.String())
+
+	if matched != true {
+		t.Log("The log entry did not match the regex pattern")
+
+		// Print the log output
+		t.Log(buf.String())
+		t.Fail()
+	}
+}
