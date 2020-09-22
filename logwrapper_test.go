@@ -1,17 +1,27 @@
 package logwrapper
 
 import (
+	"bytes"
 	"fmt"
 	"os"
+	"regexp"
 	"testing"
 )
 
+// We need a buffer to write to
+// In order to test log output
+var buf bytes.Buffer
+
 func Setup() {
 	fmt.Println("SETTING UP")
+
+	// Set output to the buffer
+	SetOutput(&buf)
 }
 
 func TearDown() {
 	fmt.Println("TEARING DOWN")
+	SetOutput(os.Stdout)
 }
 
 // TestMain will run `Setup` and `Teardown` and all the tests in between
@@ -52,4 +62,35 @@ func TestInvalidLogLevel(t *testing.T) {
 		t.Fail()
 	}
 
+}
+
+// TestInvalidLogLevel is testing that `SetLogLevel` will throw an error on an invalid log level
+func TestLogFormat(t *testing.T) {
+
+	// Log test message
+	var message string = "this is a log entry"
+
+	// Create log entry
+	Info(message)
+
+	// The log format should look like this:
+	// INFO 2020/09/22 17:34:16 INFO this is a log entry
+	var pattern string = fmt.Sprintf("[A-Z]{1,4} [0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2} %s", message)
+	r, err := regexp.Compile(pattern)
+
+	if err != nil {
+		t.Log(err)
+		t.Fail()
+	}
+
+	matched := r.MatchString(buf.String())
+	t.Log(matched)
+
+	if matched != true {
+		t.Log("The log entry did not match the regex pattern")
+
+		// Print the log output
+		t.Log(buf.String())
+		t.Fail()
+	}
 }
