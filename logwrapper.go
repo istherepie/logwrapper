@@ -3,6 +3,7 @@ package logwrapper
 import (
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
 )
@@ -100,4 +101,13 @@ func Error(messages ...interface{}) {
 // Fatal is a wrapper around the `log.Fatal` method which will exit the application.
 func Fatal(messages ...interface{}) {
 	ErrorLogger.Fatal(messages...)
+}
+
+// SetOutput is a wrapper around the `log.Setoutput` method for any io.Writer type
+func SetOutput(output io.Writer) {
+	TraceLogger.SetOutput(output)
+	DebugLogger.SetOutput(output)
+	InfoLogger.SetOutput(output)
+	WarningLogger.SetOutput(output)
+	ErrorLogger.SetOutput(output)
 }
