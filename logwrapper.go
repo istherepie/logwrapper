@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-var defaultLogLevel int
+var DefaultLogLevel int
 var loglevels map[string]int
 
 // Available log handlers
@@ -33,7 +33,7 @@ func init() {
 	}
 
 	// Set default log level to 0/NOTSET
-	defaultLogLevel = loglevels["NOTSET"]
+	DefaultLogLevel = loglevels["NOTSET"]
 
 	// All log handlers print to stdout by default
 	TraceLogger = log.New(os.Stdout, "TRACE ", log.Ldate|log.Ltime)
@@ -54,7 +54,7 @@ func SetLogLevel(level string) error {
 		return errors.New(message)
 	}
 
-	defaultLogLevel = value
+	DefaultLogLevel = value
 
 	return nil
 }
@@ -67,7 +67,7 @@ func Trace(messages ...interface{}) {
 // Debug is a wrapper around the `log.Println` method.
 func Debug(messages ...interface{}) {
 
-	if defaultLogLevel > 10 {
+	if DefaultLogLevel > 10 {
 		return
 	}
 
@@ -77,7 +77,7 @@ func Debug(messages ...interface{}) {
 // Info is a wrapper around the `log.Println` method.
 func Info(messages ...interface{}) {
 
-	if defaultLogLevel > 20 {
+	if DefaultLogLevel > 20 {
 		return
 	}
 
@@ -87,7 +87,7 @@ func Info(messages ...interface{}) {
 // Warning is a wrapper around the `log.Println` method.
 func Warning(messages ...interface{}) {
 
-	if defaultLogLevel > 30 {
+	if DefaultLogLevel > 30 {
 		return
 	}
 	WarningLogger.Println(messages...)
